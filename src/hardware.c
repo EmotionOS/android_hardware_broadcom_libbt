@@ -526,8 +526,17 @@ static uint8_t hw_config_findpatch(char *p_chip_id_str)
         {
             /* Check if filename starts with chip-id name */
             int cmp;
-
+#ifdef TRLTE_BUG
+            /* 
+             * Trlte has BCM 43569 chipset, and Samsung
+             * uses BCM 4358_Wisol Firmware, so it does not work.
+             * Only look for "bcm435" when we have a trlte device.
+             * 
+             */
+            cmp = hw_strncmp(dp->d_name, p_chip_id_str, 6);
+#else
             cmp = hw_strncmp(dp->d_name, p_chip_id_str, strlen(p_chip_id_str));
+#endif
             if (cmp == 0)
             {
 #ifdef SAMSUNG_BLUETOOTH
